@@ -6,93 +6,69 @@ import Button from '../Button';
 import Modal from '../Modal';
 import PropTypes from 'prop-types';
 import { BsArrowRightShort } from 'react-icons/bs';
+
+const handleFetch = () => {};
+
 export default class ImageGallery extends Component {
   state = {
     resault: null,
-    searchValue: '',
     status: 'idle',
     error: null,
-    oldValue: '',
-    page: 1,
     modal: false,
     largeImg: '',
     loading: false,
   };
-  componentDidMount() {
-    console.log('galleryProps', this.props);
+
+  handleFetch() {
+    console.log('call');
+    const { value, page } = this.props.data;
+    this.setState({
+      loading: true,
+    });
+    fetch(
+      `https://pixabay.com/api/?q=${value}&page=${page}&key=22553611-d17142b90db34a0c793ad1fbe&image_type=photo&orientation=horizontal&per_page=12`,
+    )
+      .then(res => res.json())
+      .then(resault => {
+        if (resault.hits.length === 0) {
+          this.setState({
+            status: 'noImage',
+            loading: false,
+          });
+          // console.log('noImage', this.status);
+        } else {
+          this.setState(prevState => {
+            const newArray =
+              page > 1 ? [...prevState.resault, ...resault.hits] : resault.hits;
+            return {
+              resault: newArray,
+              status: 'resolved',
+              loading: false,
+            };
+          });
+        }
+      })
+      .catch(error => this.state({ staus: error }));
   }
+
   componentDidUpdate(prevProps, prevState) {
-    const { value } = this.props.data;
-    const newPage = this.state.page.toString();
-    if (prevProps.data.value !== value) {
-      if (this.state.page !== 1) {
-        this.setState({ page: 1 });
-      } else {
-        this.setState({ oldValue: value });
-        this.setState({ status: 'pending', loading: true });
-        this.setState({ searchValue: value });
-        console.log('componentDidUpdate', value);
-
-        fetch(
-          `https://pixabay.com/api/?q=${value}&page=${newPage}&key=22553611-d17142b90db34a0c793ad1fbe&image_type=photo&orientation=horizontal&per_page=12`,
-        )
-          .then(res => res.json())
-          .then(resault => {
-            if (resault.hits.length === 0) {
-              this.setState({
-                status: 'noImage',
-                loading: false,
-              });
-              console.log('noImage', this.status);
-            } else {
-              this.setState({
-                resault: resault.hits,
-                status: 'resolved',
-                loading: false,
-              });
-            }
-          })
-          .catch(error => this.state({ staus: error }));
-      }
-      // .finally(() => this.setState({ status: 'resolved' }));
-    }
-    if (prevState.page !== this.state.page) {
-      this.setState({
-        // status: 'pending',
-        loading: true,
-      });
-      fetch(
-        `https://pixabay.com/api/?q=${value}&page=${newPage}&key=22553611-d17142b90db34a0c793ad1fbe&image_type=photo&orientation=horizontal&per_page=12`,
-      )
-        .then(res => res.json())
-        .then(resault => {
-          if (resault.hits.length === 0) {
-            this.setState({ status: 'noImage' });
-          } else {
-            this.setState({ status: 'resolved' });
-            this.setState(prevState => ({
-              resault: prevState.resault.concat(resault.hits),
-            }));
-          }
-        });
+    if (prevProps !== this.props) {
+      this.handleFetch();
     }
   }
 
-  handleClick = e => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
-
-    console.log('кнопочка');
-  };
   modalClick = e => {
     this.setState({ modal: false });
   };
+
   modalOpen = e => {
     this.setState({ modal: true });
     console.log('modalOpen event', e.getAttribute('largeImg'));
     this.setState({ largeImg: e.getAttribute('largeImg') });
   };
+
   render() {
-    const { error, status, resault, oldValue } = this.state;
+    const { error, status, resault } = this.state;
 
     if (status === 'resolved') {
       return (
@@ -107,7 +83,7 @@ export default class ImageGallery extends Component {
               />
             ))}
           </ul>
-          <div></div>
+
           {this.state.modal && (
             <Modal
               data={this.state.status}
@@ -115,8 +91,9 @@ export default class ImageGallery extends Component {
               click={this.modalClick}
             />
           )}
-
-          <Button click={this.handleClick} />
+          <div className={css.button}>
+            <Button click={this.props.paginator} />
+          </div>
           <div />
         </>
       );
@@ -132,10 +109,10 @@ export default class ImageGallery extends Component {
       <h1>Error</h1>;
     }
     if (status === 'noImage') {
-      return <h1>No images with word {oldValue}</h1>;
+      return <h1>No images with word ${this.props.value}</h1>;
     }
     if (status === 'idle') {
-      return <div></div>;
+      return;
     }
   }
 }

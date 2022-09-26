@@ -1,0 +1,18 @@
+.button {
+  background-color: rgb(67, 84, 177);
+  color: #fff;
+  height: 40px;
+  width: 150px;
+  font-size: 16px;
+  margin: 0 auto;
+  box-shadow: 0 5px 7px 0 rgba(0, 0, 0, 0.4);
+  outline: none;
+  border: none;
+}
+.button:hover {
+  box-shadow: 0 5px 4px 0 rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+.button:focus {
+  box-shadow: 0 5px 4px 0 rgba(0, 0, 0, 0.4);
+}

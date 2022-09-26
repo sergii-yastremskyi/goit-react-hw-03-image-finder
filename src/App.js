@@ -13,12 +13,13 @@ export default class App extends Component {
   submitHandler = data => {
     this.setState({
       value: data.searchValue,
+      page: 1,
     });
     console.log('data come in app', this.state);
   };
   pageHandler = () => {
     this.setState(prevState => {
-      this.setState({ page: prevState.page + 1 });
+      return { ...prevState, page: 1 };
     });
   };
 
@@ -26,7 +27,11 @@ export default class App extends Component {
     return (
       <div className="container">
         <Searchbar onSubmit={this.submitHandler} />
-        <ImageGallery className={css.gallery} data={this.state} />
+        <ImageGallery
+          className={css.gallery}
+          data={this.state}
+          paginator={this.pageHandler}
+        />
       </div>
     );
   }

@@ -14,3 +14,8 @@
   margin: 0 auto;
   justify-content: center;
 }
+.button {
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+}
