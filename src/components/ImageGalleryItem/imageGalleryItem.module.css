@@ -1,0 +1,15 @@
+.imageGalleryListItem {
+  margin: 10px;
+  overflow: hidden;
+  object-fit: cover;
+  max-width: 350px;
+  height: 250px;
+  transition: all 0.5s;
+}
+.imageItem {
+  max-width: 450px;
+}
+.imageGalleryListItem:hover {
+  cursor: zoom-in;
+  scale: 1.05;
+}

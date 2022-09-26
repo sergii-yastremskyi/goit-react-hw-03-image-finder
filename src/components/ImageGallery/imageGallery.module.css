@@ -1,0 +1,16 @@
+.imageList {
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  justify-content: center;
+  width: 70%;
+  padding: 0;
+}
+.loader {
+  display: flex;
+  flex-direction: row;
+
+  margin: 0 auto;
+  justify-content: center;
+}
