@@ -19,7 +19,7 @@ export default class App extends Component {
   };
   pageHandler = () => {
     this.setState(prevState => {
-      return { ...prevState, page: 1 };
+      return { page: prevState.page + 1 };
     });
   };
 

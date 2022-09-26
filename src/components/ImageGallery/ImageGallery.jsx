@@ -20,7 +20,6 @@ export default class ImageGallery extends Component {
   };
 
   handleFetch() {
-    console.log('call');
     const { value, page } = this.props.data;
     this.setState({
       loading: true,
@@ -35,7 +34,6 @@ export default class ImageGallery extends Component {
             status: 'noImage',
             loading: false,
           });
-          // console.log('noImage', this.status);
         } else {
           this.setState(prevState => {
             const newArray =
@@ -63,7 +61,7 @@ export default class ImageGallery extends Component {
 
   modalOpen = e => {
     this.setState({ modal: true });
-    console.log('modalOpen event', e.getAttribute('largeImg'));
+
     this.setState({ largeImg: e.getAttribute('largeImg') });
   };
 
