@@ -8,8 +8,9 @@ export default class ImageGalleryItem extends Component {
 
   componentDidMount() {
     if (this.props.isLast) {
-      this.ref.current.scrollIntoView();
-      console.log('ref.current    ', this.ref.current);
+      setTimeout(() => {
+        this.ref.current.scrollIntoView({ behavior: 'smooth' });
+      }, 500);
     }
   }
 
